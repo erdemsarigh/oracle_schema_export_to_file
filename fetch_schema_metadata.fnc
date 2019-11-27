@@ -16,13 +16,15 @@ create or replace function fetch_schema_metadata(in_owner       in varchar2,
 begin
   dbms_lob.createtemporary(ddltext, true);
   dmh := dbms_metadata.open('TABLE');
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'STORAGE',                                    FALSE);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'TABLESPACE',                                    FALSE);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'PRETTY',                                    true);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SQLTERMINATOR',                                    true);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'FORCE',                                    false);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS_AS_ALTER',                                    true);
-  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',                                    FALSE);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'STORAGE',FALSE);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'TABLESPACE',FALSE);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'PRETTY',true);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SQLTERMINATOR',true);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'FORCE',false);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'CONSTRAINTS_AS_ALTER',true);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'SEGMENT_ATTRIBUTES',FALSE);
+  dbms_metadata.set_transform_param(dbms_metadata.session_transform,'REMAP_SCHEMA', in_owner , NULL);
+  
   for ot in ots.first .. ots.last loop
     for t in (select object_name
                 from all_objects
