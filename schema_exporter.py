@@ -154,6 +154,7 @@ parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('-s', action='store', dest='schema',  help='Schema name')
 parser.add_argument('-p', action='store', dest='password',  help='Schema password')
 parser.add_argument('-t', action='store', dest='tns',  help='TNS name')
+parser.add_argument('-o', action='store', dest='owner',  help='owner name')
 parser.add_argument('-path', action='store', dest='path',  help='source path ')
 parser.add_argument('-tables', action='store', dest='tables',  help='tables for exporting data ')
 
@@ -166,13 +167,13 @@ createprc(db)
 createprc2(db)
 
 ca = db.cursor() 
-sch = ca.execute(ca.prepare("select distinct object_name, object_type from all_objects where lower(owner) = lower('" + args.schema  + "')  and lower(object_name) like lower('%')")).fetchall() 
+sch = ca.execute(ca.prepare("select distinct object_name, object_type from all_objects where lower(owner) = lower('" + args.owner  + "')  and lower(object_name) like lower('%')")).fetchall() 
 
 for aline  in [x for x in sch]: 
      q = ca.prepare('select fetch_schema_metadata(:1, :2,:3) as text from dual') 
      c = db.cursor() 
      print aline[0].upper()
-     res = ca.execute(q, [ args.schema, aline[1].upper(), aline[0].upper(),]) 
+     res = ca.execute(q, [ args.owner, aline[1].upper(), aline[0].upper(),]) 
      dirpath  = args.path + "\\" + aline[1] 
      if not os.path.exists( dirpath ):
          os.makedirs(dirpath )
