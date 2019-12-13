@@ -167,7 +167,7 @@ createprc(db)
 createprc2(db)
 
 ca = db.cursor() 
-sch = ca.execute(ca.prepare("select distinct object_name, object_type from all_objects where lower(owner) = lower('" + args.owner  + "')  and lower(object_name) like lower('%')")).fetchall() 
+sch = ca.execute(ca.prepare("select distinct object_name, object_type from all_objects where lower(owner) = lower('" + args.owner  + "')  and lower(object_name) like lower('%') and object_type not in ('INDEX PARTITION', 'TABLE SUBPARTITION', 'TABLE PARTITION', 'LOB PARTITION', 'INDEX SUBPARTITION', 'LOB', 'LOB SUBPARTITION') ")).fetchall() 
 
 for aline  in [x for x in sch]: 
      q = ca.prepare('select fetch_schema_metadata(:1, :2,:3) as text from dual') 
