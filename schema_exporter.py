@@ -172,7 +172,7 @@ sch = ca.execute(ca.prepare("select distinct object_name, object_type from all_o
 for aline  in [x for x in sch]: 
      q = ca.prepare('select fetch_schema_metadata(:1, :2,:3) as text from dual') 
      c = db.cursor() 
-     print aline[0].upper()
+     print(aline[0].upper())
      res = ca.execute(q, [ args.owner, aline[1].upper(), aline[0].upper(),]) 
      dirpath  = args.path + "\\" + aline[1] 
      if not os.path.exists( dirpath ):
